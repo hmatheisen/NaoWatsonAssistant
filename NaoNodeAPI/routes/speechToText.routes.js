@@ -13,24 +13,22 @@ router.post('/recognize', upload.single('audio'), (req, res) => {
     }
 
     speechToText.recognize(recognizeParams, (err, result) => {
+        fs.unlink(req.file.path, (err) => {
+            if (err) throw err;
+        });
+
         if (err) {
             console.log(err);
-            fs.unlink(req.file.path, (err) => {
-                if (err) throw err;
-            });
-            res.send(err)
+            res.send(err);
         } else {
-            fs.unlink(req.file.path, (err) => {
-                if (err) throw err;
-            });
-            console.log(JSON.stringify(result, null, 2))
+            console.log(JSON.stringify(result, null, 2));
             try {
-                res.send(JSON.stringify({ response: result.results[0].alternatives[0].transcript }))
+                res.send(JSON.stringify({ response: result.results[0].alternatives[0].transcript }));
             } catch (err) {
-                res.send(JSON.stringify({ response: "Sorry, I did not understand" }))
+                res.send(JSON.stringify({ response: "Sorry, I did not understand" }));
             }
         }
-    })
+    });
 });
 
 module.exports = router;

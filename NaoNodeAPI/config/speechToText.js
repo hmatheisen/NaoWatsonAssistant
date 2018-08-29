@@ -5,6 +5,6 @@ const speechToText = new SpeechToText({
     username: process.env.STT_USERNAME,
     password: process.env.STT_PASSWORD,
     url: 'https://stream-fra.watsonplatform.net/speech-to-text/api'
-})
+});
 
 module.exports = speechToText;
