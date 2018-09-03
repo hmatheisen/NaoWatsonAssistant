@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+require('./config/mongo');
 
 const { speechToTextRoutes, assistantRoutes, visualRecognitionroutes } = require('./routes');
 

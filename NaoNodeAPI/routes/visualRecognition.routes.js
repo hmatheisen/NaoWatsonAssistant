@@ -1,9 +1,11 @@
 const router = require('express').Router();
-const { visualRecognition } = require('../config');
 const fs = require('fs');
 const multer = require('multer');
 const upload = multer({ dest: 'files/' });
 require('dotenv').config();
+
+const { visualRecognition } = require('../config');
+const { mongoUploadMed } = require('../helpers');
 
 router.post('/classify', upload.single('image'), (req, res) => {
 
@@ -24,8 +26,9 @@ router.post('/classify', upload.single('image'), (req, res) => {
         } else {
             console.log(JSON.stringify(response, null, 2));
             try {
+                mongoUploadMed(response.images[0].classifiers[0].classes[0].class);
                 res.send(JSON.stringify({ response: response.images[0].classifiers[0].classes[0].class }));
-            } catch (err) {
+            } catch (error) {
                 res.send(JSON.stringify({ response: "I don't know what it is." }));
             }
         }

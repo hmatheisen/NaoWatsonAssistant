@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const { assistant } = require('../config');
 require('dotenv').config();
+
+const { assistant } = require('../config');
+const { mongoUpdateContext, findContext } = require('../helpers');
 
 router.post('/message', (req, res) => {
 
@@ -8,7 +10,8 @@ router.post('/message', (req, res) => {
         workspace_id: process.env.ASSISTANT_WORKSPACE_ID,
         input: {
             text: req.body.text
-        }
+        },
+        context: findContext()
     }
 
     assistant.message(params, (err, response) => {
@@ -17,6 +20,7 @@ router.post('/message', (req, res) => {
             res.send(err);
         } else {
             res.send(JSON.stringify({response: response.output.text[0]}));
+            mongoUpdateContext(response.context);
             console.log(response);
         }
     });

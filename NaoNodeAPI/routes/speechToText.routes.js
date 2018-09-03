@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const { speechToText } = require('../config');
 const fs = require('fs');
 const multer = require('multer');
 const upload = multer({ dest: 'files/' });
+
+const { speechToText } = require('../config');
 
 router.post('/recognize', upload.single('audio'), (req, res) => {
 
